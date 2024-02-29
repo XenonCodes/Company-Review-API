@@ -36,3 +36,8 @@ composer install
 ```
 php artisan key:generate
 ```
+
+5. В открытой консоли директории проекта введите команду для генерации таблиц с фековыми данными
+```
+php artisan migrate -seed
+```
