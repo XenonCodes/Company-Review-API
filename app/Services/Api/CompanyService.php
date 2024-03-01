@@ -3,9 +3,33 @@
 namespace App\Services\Api;
 
 use App\Models\Company;
+use Illuminate\Database\Eloquent\Collection;
 
 class CompanyService
 {
+    /**
+     * Получить список всех компаний.
+     *
+     * @return Collection
+     */
+    public function getAllCompanys(): Collection
+    {
+        return Company::all();
+    }
+
+    /**
+     * Получить информацию о конкретной компании.
+     *
+     * @param int $сompanyId Идентификатор компании.
+     * @return Company
+     */
+    public function getCompanyInfo(int $сompanyId): Company
+    {
+        $сompany = Company::findOrFail($сompanyId);
+
+        return $сompany;
+    }
+
     /**
      * Создать новую компанию.
      *

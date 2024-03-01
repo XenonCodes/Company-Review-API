@@ -19,7 +19,7 @@ class CommentUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'content' => 'string|min:150|max:550',
@@ -27,7 +27,7 @@ class CommentUpdateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'content.required' => 'Поле контента обязательно для заполнения.',

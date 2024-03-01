@@ -19,7 +19,7 @@ class UserCreateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => 'required|string|min:3|max:40',
@@ -29,7 +29,7 @@ class UserCreateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'first_name.required' => 'Поле "Имя" обязательно для заполнения.',
@@ -45,7 +45,7 @@ class UserCreateRequest extends FormRequest
             'phone_number.required' => 'Поле "Номер телефона" обязательно для заполнения.',
             'phone_number.string' => 'Поле "Номер телефона" должно быть строкой.',
             'phone_number.regex' => 'Неверный формат номера телефона. Пожалуйста, используйте формат +7XXXXXXXXXX.',
-    
+
             'avatar.image' => 'Файл должен быть изображением.',
             'avatar.mimes' => 'Формат изображения должен быть JPG или PNG.',
             'avatar.max' => 'Размер изображения не должен превышать 2MB.',

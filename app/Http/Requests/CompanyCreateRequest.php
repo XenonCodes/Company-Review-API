@@ -19,7 +19,7 @@ class CompanyCreateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|string|min:3|max:40',
@@ -28,7 +28,7 @@ class CompanyCreateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'name.required' => 'Поле имя обязательно для заполнения.',
