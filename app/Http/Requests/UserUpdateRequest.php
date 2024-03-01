@@ -19,7 +19,7 @@ class UserUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => 'string|min:3|max:40',
@@ -29,7 +29,7 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'first_name.string' => 'Поле "Имя" должно быть строкой.',

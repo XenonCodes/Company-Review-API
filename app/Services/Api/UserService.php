@@ -3,9 +3,33 @@
 namespace App\Services\Api;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserService
 {
+    /**
+     * Получить список всех пользователей.
+     *
+     * @return Collection
+     */
+    public function getAllUsers(): Collection
+    {
+        return User::all();
+    }
+
+    /**
+     * Получить информацию о конкретном пользователе.
+     *
+     * @param int $userId Идентификатор пользователя.
+     * @return User
+     */
+    public function getUserInfo(int $userId): User
+    {
+        $user = User::findOrFail($userId);
+
+        return $user;
+    }
+
     /**
      * Создать нового пользователя.
      *

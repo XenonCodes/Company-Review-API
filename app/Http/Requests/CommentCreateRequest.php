@@ -19,7 +19,7 @@ class CommentCreateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'user_id' => 'required|integer',
@@ -29,7 +29,7 @@ class CommentCreateRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'user_id.required' => 'Идентификатор пользователя обязателен.',

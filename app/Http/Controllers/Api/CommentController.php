@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentCreateRequest;
 use App\Http\Requests\CommentUpdateRequest;
+use App\Http\Resources\CommentResource;
 use App\Services\Api\CommentService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CommentController extends Controller
 {
@@ -18,22 +21,45 @@ class CommentController extends Controller
     }
 
     /**
+     * Получить список всех комментариев.
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
+    {
+        $comments = $this->commentService->getAllComments();
+        return response()->json(['data' =>CommentResource::collection($comments)], 200);
+    }
+
+    /**
+     * Получить комментарий.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
+    {
+        $comment = $this->commentService->getCommentInfo($id);
+        return response()->json(['data' => new CommentResource($comment)], 200);
+    }
+
+    /**
      * Создать новый комментарий.
      *
-     * @param CommentRequest $request
+     * @param CommentCreateRequest $request
      * @return JsonResponse
      */
     public function store(CommentCreateRequest $request): JsonResponse
     {
         $comment = $this->commentService->createComment($request->validated());
 
-        return response()->json($comment, 201);
+        return response()->json(new CommentResource($comment), 201);
     }
 
     /**
      * Обновить информацию о комментарии.
      *
-     * @param CommentRequest $request
+     * @param CommentUpdateRequest $request
      * @param int $id Идентификатор комментария.
      * @return JsonResponse
      */

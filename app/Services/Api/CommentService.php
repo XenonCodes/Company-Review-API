@@ -3,9 +3,33 @@
 namespace App\Services\Api;
 
 use App\Models\Comment;
+use Illuminate\Database\Eloquent\Collection;
 
 class CommentService
 {
+    /**
+     * Получить список всех комментариев.
+     *
+     * @return Collection
+     */
+    public function getAllComments(): Collection
+    {
+        return Comment::all();
+    }
+
+    /**
+     * Получить информацию о конкретной комментарии.
+     *
+     * @param int $сommentId Идентификатор комментария.
+     * @return Comment
+     */
+    public function getCommentInfo(int $сommentId): Comment
+    {
+        $сomment = Comment::findOrFail($сommentId);
+
+        return $сomment;
+    }
+
     /**
      * Создать новый комментарий.
      *
