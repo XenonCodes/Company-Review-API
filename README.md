@@ -66,13 +66,14 @@ POST /api/users
 3. Обновить информацию о пользователе.
 
 ```
-PUT /api/users/{id}
+POST /api/users/{id}?_method=PUT
 
 Тело запроса:
 {
   "first_name": "Michele",
   "last_name": "Brekke",
-  "phone_number": "+70000000000"
+  "phone_number": "+70000000000",
+  "avatar": "img.jpg"
 }
 ```
 
@@ -111,12 +112,13 @@ POST /api/companies
 3. Обновить информацию о компании.
 
 ```
-PUT /api/companies/{id}
+POST /api/companies/{id}?_method=PUT
 
 Тело запроса:
 {
   "name": "Hudson Inc",
-  "description": "Et velit aut ut quibusdam saepe aperiam ullam cum. Quis nihil quae dolores. Impedit porro doloremque expedita. Illo aut hic maxime velit qui accusamus."
+  "description": "Et velit aut ut quibusdam saepe aperiam ullam cum. Quis nihil quae dolores. Impedit porro doloremque expedita. Illo aut hic maxime velit qui accusamus.",
+  "logo": "img.png"
 }
 ```
 

@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request): JsonResponse
     {
-        $user = $this->userService->createUser($request->validated());
+        $user = $this->userService->createUser($request->validated(), $request->file('avatar'));
 
         return response()->json(['data' => new UserResource($user)], 201);
     }
@@ -63,7 +63,7 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, int $id): JsonResponse
     {
-        $user = $this->userService->updateUser($id, $request->validated());
+        $user = $this->userService->updateUser($id, $request->validated(), $request->file('avatar'));
 
         return response()->json(['data' => new UserResource($user)], 200);
     }

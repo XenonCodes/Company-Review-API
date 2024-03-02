@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserCreateRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class UserCreateRequest extends FormRequest
         return [
             'first_name' => 'required|string|min:3|max:40',
             'last_name' => 'required|string|min:3|max:40',
-            'phone_number' => 'required|string|regex:/^\+7\d{10}$/',
+            'phone_number' => 'required|string|regex:/^\+7\d{10}$/|unique:users,phone_number',
             'avatar' => 'image|mimes:jpg,png|max:2048',
         ];
     }
@@ -45,6 +46,7 @@ class UserCreateRequest extends FormRequest
             'phone_number.required' => 'Поле "Номер телефона" обязательно для заполнения.',
             'phone_number.string' => 'Поле "Номер телефона" должно быть строкой.',
             'phone_number.regex' => 'Неверный формат номера телефона. Пожалуйста, используйте формат +7XXXXXXXXXX.',
+            'phone_number.unique' => 'Номер телефона уже используется.',
 
             'avatar.image' => 'Файл должен быть изображением.',
             'avatar.mimes' => 'Формат изображения должен быть JPG или PNG.',

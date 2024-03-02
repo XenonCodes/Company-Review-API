@@ -8,8 +8,6 @@ use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Services\Api\CommentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CommentController extends Controller
 {
