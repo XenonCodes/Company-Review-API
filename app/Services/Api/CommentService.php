@@ -20,12 +20,12 @@ class CommentService
     /**
      * Получить информацию о конкретной комментарии.
      *
-     * @param int $сommentId Идентификатор комментария.
+     * @param int $commentId Идентификатор комментария.
      * @return Comment
      */
-    public function getCommentInfo(int $сommentId): Comment
+    public function getCommentInfo(int $commentId): Comment
     {
-        $сomment = Comment::findOrFail($сommentId);
+        $сomment = Comment::findOrFail($commentId);
 
         return $сomment;
     }

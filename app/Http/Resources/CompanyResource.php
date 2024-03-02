@@ -17,9 +17,11 @@ class CompanyResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'logo' => $this->logo,
-            'created_at' => $this->created_at,
+            // Включает description logo created_at и average_rating только если они доступны
+            'description' => $this->when(isset($this->description), $this->description),
+            'logo' => $this->when(isset($this->logo), $this->logo), 
+            'created_at' => $this->when(isset($this->created_at), $this->created_at),
+            'average_rating' => $this->when(isset($this->average_rating), $this->average_rating)
         ];
     }
 }

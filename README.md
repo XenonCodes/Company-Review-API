@@ -66,7 +66,7 @@ POST /api/users
 3. Обновить информацию о пользователе.
 
 ```
-POST /api/users/{id}?_method=PUT
+POST /api/users/{userId}?_method=PUT
 
 Тело запроса:
 {
@@ -80,13 +80,13 @@ POST /api/users/{id}?_method=PUT
 4. Получить информацию о пользователе.
 
 ```
-GET /api/users/{id}
+GET /api/users/{userId}
 ```
 
 5. Удалить пользователя.
 
 ```
-DELETE /api/users/{id}
+DELETE /api/users/{userId}
 ```
 
 ## Компании (Сompanies)
@@ -112,7 +112,7 @@ POST /api/companies
 3. Обновить информацию о компании.
 
 ```
-POST /api/companies/{id}?_method=PUT
+POST /api/companies/{companyId}?_method=PUT
 
 Тело запроса:
 {
@@ -125,13 +125,31 @@ POST /api/companies/{id}?_method=PUT
 4. Получить информацию о компании.
 
 ```
-GET /api/companies/{id}
+GET /api/companies/{companyId}
 ```
 
 5. Удалить компанию.
 
 ```
-DELETE /api/companies/{id}
+DELETE /api/companies/{companyId}
+```
+
+6. Получить комментарии компании по ID.
+
+```
+GET /api/companies/{companyId}/comments
+```
+
+7. Рассчитать общую оценку компании.
+
+```
+GET /api/companies/{companyId}/rating
+```
+
+8. Получить топ-10 компаний по оценке.
+
+```
+GET /api/companies/{companyId}/comments
 ```
 
 ## Комментарии (Сomments)
@@ -159,7 +177,7 @@ POST /api/comments
 3. Обновить комментарий.
 
 ```
-PUT /api/comments/{id}
+PUT /api/comments/{commentId}
 
 Тело запроса:
 {
@@ -171,11 +189,11 @@ PUT /api/comments/{id}
 4. Получить комментарий.
 
 ```
-GET /api/comments/{id}
+GET /api/comments/{commentId}
 ```
 
 5. Удалить комментарий.
 
 ```
-DELETE /api/comments/{id}
+DELETE /api/comments/{commentId}
 ```

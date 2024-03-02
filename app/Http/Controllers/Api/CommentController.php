@@ -32,12 +32,12 @@ class CommentController extends Controller
     /**
      * Получить комментарий.
      *
-     * @param int $id
+     * @param int $commentId
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(int $commentId): JsonResponse
     {
-        $comment = $this->commentService->getCommentInfo($id);
+        $comment = $this->commentService->getCommentInfo($commentId);
         return response()->json(['data' => new CommentResource($comment)], 200);
     }
 
@@ -58,12 +58,12 @@ class CommentController extends Controller
      * Обновить информацию о комментарии.
      *
      * @param CommentUpdateRequest $request
-     * @param int $id Идентификатор комментария.
+     * @param int $commentId Идентификатор комментария.
      * @return JsonResponse
      */
-    public function update(CommentUpdateRequest $request, int $id): JsonResponse
+    public function update(CommentUpdateRequest $request, int $commentId): JsonResponse
     {
-        $comment = $this->commentService->updateComment($id, $request->validated());
+        $comment = $this->commentService->updateComment($commentId, $request->validated());
 
         return response()->json($comment, 200);
     }
@@ -71,12 +71,12 @@ class CommentController extends Controller
     /**
      * Удалить комментарий.
      *
-     * @param int $id Идентификатор комментария.
+     * @param int $commentId Идентификатор комментария.
      * @return JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $commentId): JsonResponse
     {
-        $this->commentService->deleteComment($id);
+        $this->commentService->deleteComment($commentId);
 
         return response()->json(['message' => 'Comment deleted successfully'], 204);
     }
