@@ -49,7 +49,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyCreateRequest $request): JsonResponse
     {
-        $company = $this->companyService->createCompany($request->validated());
+        $company = $this->companyService->createCompany($request->validated(), $request->file('logo'));
 
         return response()->json(['data' => new CompanyResource($company)], 201);
     }
@@ -63,7 +63,7 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, int $id): JsonResponse
     {
-        $company = $this->companyService->updateCompany($id, $request->validated());
+        $company = $this->companyService->updateCompany($id, $request->validated(), $request->file('logo'));
 
         return response()->json(['data' => new CompanyResource($company)], 200);
     }

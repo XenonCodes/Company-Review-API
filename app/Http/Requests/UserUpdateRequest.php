@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'first_name' => 'string|min:3|max:40',
             'last_name' => 'string|min:3|max:40',
-            'phone_number' => 'string|regex:/^\+7\d{10}$/',
+            'phone_number' => 'string|regex:/^\+7\d{10}$/|unique:users,phone_number,',
             'avatar' => 'image|mimes:jpg,png|max:2048',
         ];
     }
@@ -42,6 +42,7 @@ class UserUpdateRequest extends FormRequest
     
             'phone_number.string' => 'Поле "Номер телефона" должно быть строкой.',
             'phone_number.regex' => 'Неверный формат номера телефона. Пожалуйста, используйте формат +7XXXXXXXXXX.',
+            'phone_number.unique' => 'Номер телефона уже используется.',
     
             'avatar.image' => 'Файл должен быть изображением.',
             'avatar.mimes' => 'Формат изображения должен быть JPG или PNG.',
