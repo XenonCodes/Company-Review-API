@@ -32,12 +32,12 @@ class UserController extends Controller
     /**
      * Получить информацию о студенте.
      *
-     * @param int $id
+     * @param int $userId
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(int $userId): JsonResponse
     {
-        $user = $this->userService->getUserInfo($id);
+        $user = $this->userService->getUserInfo($userId);
         return response()->json(['data' => new UserResource($user)], 200);
     }
 
@@ -58,12 +58,12 @@ class UserController extends Controller
      * Обновить информацию о пользователе.
      *
      * @param UserUpdateRequest $request
-     * @param int $id Идентификатор пользователя.
+     * @param int $userId Идентификатор пользователя.
      * @return JsonResponse
      */
-    public function update(UserUpdateRequest $request, int $id): JsonResponse
+    public function update(UserUpdateRequest $request, int $userId): JsonResponse
     {
-        $user = $this->userService->updateUser($id, $request->validated(), $request->file('avatar'));
+        $user = $this->userService->updateUser($userId, $request->validated(), $request->file('avatar'));
 
         return response()->json(['data' => new UserResource($user)], 200);
     }
@@ -71,12 +71,12 @@ class UserController extends Controller
     /**
      * Удалить пользователя.
      *
-     * @param int $id Идентификатор пользователя.
+     * @param int $userId Идентификатор пользователя.
      * @return JsonResponse
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $userId): JsonResponse
     {
-        $this->userService->deleteUser($id);
+        $this->userService->deleteUser($userId);
         return response()->json(['message' => 'User deleted successfully'], 204);
     }
 }

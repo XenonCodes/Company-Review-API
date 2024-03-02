@@ -2,9 +2,11 @@
 
 namespace App\Services\Api;
 
+use App\Models\Comment;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 class CompanyService
 {
@@ -101,5 +103,43 @@ class CompanyService
         }
 
         $company->delete();
+    }
+
+    /**
+     * Получить комментарии компании по ее ID.
+     *
+     * @param int $companyId Идентификатор компании.
+     * @return Collection<Comment>
+     */
+    public function getCompanyComments(int $companyId): Collection
+    {
+        return Comment::where('company_id', $companyId)->get();
+    }
+
+    /**
+     * Вычислить общую оценку компании.
+     *
+     * @param int $companyId Идентификатор компании.
+     * @return float|null
+     */
+    public function calculateCompanyRating(int $companyId): ?float
+    {
+        return Comment::where('company_id', $companyId)->avg('rating');
+    }
+
+    /**
+     * Получить топ-10 компаний по оценке.
+     *
+     * @return Collection<Company>
+     */
+    public function getTopRatedCompanies(): Collection
+    {
+        // Выбираем идентификатор компании, название компании и средний рейтинг из связанных комментариев.
+        return Company::select('companies.id', 'companies.name', DB::raw('avg(comments.rating) as average_rating'))
+            ->join('comments', 'companies.id', '=', 'comments.company_id') // Соединяем таблицы компаний и комментариев по идентификатору компании.
+            ->groupBy('companies.id') // Группируем результаты по идентификатору компании.
+            ->orderByDesc('average_rating') // Сортируем результаты по убыванию среднего рейтинга.
+            ->limit(10) // Показать 10
+            ->get();
     }
 }
