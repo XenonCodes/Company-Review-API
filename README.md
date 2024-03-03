@@ -149,7 +149,7 @@ GET /api/companies/{companyId}/rating
 8. Получить топ-10 компаний по оценке.
 
 ```
-GET /api/companies/{companyId}/comments
+GET /api/companies/top
 ```
 
 ## Комментарии (Сomments)

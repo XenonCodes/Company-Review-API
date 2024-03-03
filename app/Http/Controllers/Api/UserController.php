@@ -7,6 +7,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Services\Api\UserService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
@@ -25,8 +26,12 @@ class UserController extends Controller
      */
     public function index(): JsonResponse
     {
-        $users = $this->userService->getAllUsers();
-        return response()->json(['data' =>UserResource::collection($users)], 200);
+        try {
+            $users = $this->userService->getAllUsers();
+            return response()->json(['data' => UserResource::collection($users)], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить список пользователей'], 500);
+        }
     }
 
     /**
@@ -37,8 +42,14 @@ class UserController extends Controller
      */
     public function show(int $userId): JsonResponse
     {
-        $user = $this->userService->getUserInfo($userId);
-        return response()->json(['data' => new UserResource($user)], 200);
+        try {
+            $user = $this->userService->getUserInfo($userId);
+            return response()->json(['data' => new UserResource($user)], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Пользователь не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить информацию о пользователе'], 500);
+        }
     }
 
     /**
@@ -49,9 +60,12 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request): JsonResponse
     {
-        $user = $this->userService->createUser($request->validated(), $request->file('avatar'));
-
-        return response()->json(['data' => new UserResource($user)], 201);
+        try {
+            $user = $this->userService->createUser($request->validated(), $request->file('avatar'));
+            return response()->json(['data' => new UserResource($user)], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось создать нового пользователя'], 500);
+        }
     }
 
     /**
@@ -63,9 +77,14 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, int $userId): JsonResponse
     {
-        $user = $this->userService->updateUser($userId, $request->validated(), $request->file('avatar'));
-
-        return response()->json(['data' => new UserResource($user)], 200);
+        try {
+            $user = $this->userService->updateUser($userId, $request->validated(), $request->file('avatar'));
+            return response()->json(['data' => new UserResource($user)], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Пользователь не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось обновить информацию о пользователе'], 500);
+        }
     }
 
     /**
@@ -76,7 +95,13 @@ class UserController extends Controller
      */
     public function destroy(int $userId): JsonResponse
     {
-        $this->userService->deleteUser($userId);
-        return response()->json(['message' => 'User deleted successfully'], 204);
+        try {
+            $this->userService->deleteUser($userId);
+            return response()->json(['message' => 'Пользователь успешно удален'], 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Пользователь не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось удалить пользователя'], 500);
+        }
     }
 }
