@@ -7,6 +7,7 @@ use App\Http\Requests\CompanyCreateRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\CompanyResource;
+use App\Models\Company;
 use App\Services\Api\CompanyService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -117,6 +118,7 @@ class CompanyController extends Controller
     public function getCompanyComments(int $companyId): JsonResponse
     {
         try {
+            Company::findOrFail($companyId);// Проверяем есть ли такая компания
             $comments = $this->companyService->getCompanyComments($companyId);
             return response()->json(['data' => ['comments' => CommentResource::collection($comments)]], 200);
         } catch (ModelNotFoundException $e) {
@@ -137,7 +139,6 @@ class CompanyController extends Controller
         try {
             $rating = $this->companyService->calculateCompanyRating($companyId);
             $company = $this->companyService->getCompanyInfo($companyId);
-
             return response()->json(['data' => ['company' => new CompanyResource($company), 'rating' => $rating]], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Компания не найдена'], 404);
