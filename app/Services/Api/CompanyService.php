@@ -22,7 +22,7 @@ class CompanyService
      *
      * @return Collection
      */
-    public function getAllCompanys(): Collection
+    public function getAllCompanies(): Collection
     {
         return Company::all();
     }

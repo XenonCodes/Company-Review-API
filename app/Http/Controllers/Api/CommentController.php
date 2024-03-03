@@ -7,6 +7,7 @@ use App\Http\Requests\CommentCreateRequest;
 use App\Http\Requests\CommentUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Services\Api\CommentService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
@@ -25,8 +26,12 @@ class CommentController extends Controller
      */
     public function index(): JsonResponse
     {
-        $comments = $this->commentService->getAllComments();
-        return response()->json(['data' =>CommentResource::collection($comments)], 200);
+        try {
+            $comments = $this->commentService->getAllComments();
+            return response()->json(['data' => CommentResource::collection($comments)], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить список комментариев'], 500);
+        }
     }
 
     /**
@@ -37,8 +42,14 @@ class CommentController extends Controller
      */
     public function show(int $commentId): JsonResponse
     {
-        $comment = $this->commentService->getCommentInfo($commentId);
-        return response()->json(['data' => new CommentResource($comment)], 200);
+        try {
+            $comment = $this->commentService->getCommentInfo($commentId);
+            return response()->json(['data' => new CommentResource($comment)], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Комментарий не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить комментарий'], 500);
+        }
     }
 
     /**
@@ -49,9 +60,12 @@ class CommentController extends Controller
      */
     public function store(CommentCreateRequest $request): JsonResponse
     {
-        $comment = $this->commentService->createComment($request->validated());
-
-        return response()->json(new CommentResource($comment), 201);
+        try {
+            $comment = $this->commentService->createComment($request->validated());
+            return response()->json(new CommentResource($comment), 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось создать комментарий'], 500);
+        }
     }
 
     /**
@@ -66,6 +80,14 @@ class CommentController extends Controller
         $comment = $this->commentService->updateComment($commentId, $request->validated());
 
         return response()->json($comment, 200);
+        try {
+            $comment = $this->commentService->updateComment($commentId, $request->validated());
+            return response()->json($comment, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Комментарий не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось обновить комментарий'], 500);
+        }
     }
 
     /**
@@ -76,8 +98,13 @@ class CommentController extends Controller
      */
     public function destroy(int $commentId): JsonResponse
     {
-        $this->commentService->deleteComment($commentId);
-
-        return response()->json(['message' => 'Comment deleted successfully'], 204);
+        try {
+            $this->commentService->deleteComment($commentId);
+            return response()->json(['message' => 'Комментарий успешно удален'], 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Комментарий не найден'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось удалить комментарий'], 500);
+        }
     }
 }

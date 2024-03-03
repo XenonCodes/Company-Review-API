@@ -8,6 +8,7 @@ use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\CompanyResource;
 use App\Services\Api\CompanyService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
 class CompanyController extends Controller
@@ -26,8 +27,12 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companys = $this->companyService->getAllCompanys();
-        return response()->json(['data' => CompanyResource::collection($companys)], 200);
+        try {
+            $companies = $this->companyService->getAllCompanies();
+            return response()->json(['data' => CompanyResource::collection($companies)], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить список компаний'], 500);
+        }
     }
 
     /**
@@ -38,8 +43,14 @@ class CompanyController extends Controller
      */
     public function show(int $companyId): JsonResponse
     {
-        $company = $this->companyService->getCompanyInfo($companyId);
-        return response()->json(['data' => new CompanyResource($company)], 200);
+        try {
+            $company = $this->companyService->getCompanyInfo($companyId);
+            return response()->json(['data' => new CompanyResource($company)], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Компания не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить информацию о компании'], 500);
+        }
     }
 
     /**
@@ -50,9 +61,13 @@ class CompanyController extends Controller
      */
     public function store(CompanyCreateRequest $request): JsonResponse
     {
-        $company = $this->companyService->createCompany($request->validated(), $request->file('logo'));
+        try {
+            $company = $this->companyService->createCompany($request->validated(), $request->file('logo'));
 
-        return response()->json(['data' => new CompanyResource($company)], 201);
+            return response()->json(['data' => new CompanyResource($company)], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось создать новую компанию'], 500);
+        }
     }
 
     /**
@@ -64,9 +79,15 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, int $companyId): JsonResponse
     {
-        $company = $this->companyService->updateCompany($companyId, $request->validated(), $request->file('logo'));
+        try {
+            $company = $this->companyService->updateCompany($companyId, $request->validated(), $request->file('logo'));
 
-        return response()->json(['data' => new CompanyResource($company)], 200);
+            return response()->json(['data' => new CompanyResource($company)], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Компания не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось обновить информацию о компании'], 500);
+        }
     }
 
     /**
@@ -77,9 +98,14 @@ class CompanyController extends Controller
      */
     public function destroy(int $companyId): JsonResponse
     {
-        $this->companyService->deleteCompany($companyId);
-
-        return response()->json(['message' => 'Сompany deleted successfully'], 204);
+        try {
+            $this->companyService->deleteCompany($companyId);
+            return response()->json(['message' => 'Компания успешно удалена'], 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Компания не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось удалить компанию'], 500);
+        }
     }
 
     /**
@@ -90,9 +116,14 @@ class CompanyController extends Controller
      */
     public function getCompanyComments(int $companyId): JsonResponse
     {
-        $comments = $this->companyService->getCompanyComments($companyId);
-
-        return response()->json(['data' => ['comments' => CommentResource::collection($comments)]], 200);
+        try {
+            $comments = $this->companyService->getCompanyComments($companyId);
+            return response()->json(['data' => ['comments' => CommentResource::collection($comments)]], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Компания не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить комментарии компании'], 500);
+        }
     }
 
     /**
@@ -103,10 +134,16 @@ class CompanyController extends Controller
      */
     public function calculateCompanyRating(int $companyId): JsonResponse
     {
-        $rating = $this->companyService->calculateCompanyRating($companyId);
-        $company = $this->companyService->getCompanyInfo($companyId);
+        try {
+            $rating = $this->companyService->calculateCompanyRating($companyId);
+            $company = $this->companyService->getCompanyInfo($companyId);
 
-        return response()->json(['data' => ['company' => new CompanyResource($company), 'rating' => $rating]], 200);
+            return response()->json(['data' => ['company' => new CompanyResource($company), 'rating' => $rating]], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Компания не найдена'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось вычислить общую оценку компании'], 500);
+        }
     }
 
     /**
@@ -116,8 +153,11 @@ class CompanyController extends Controller
      */
     public function getTopCompaniesByRating(): JsonResponse
     {
-        $topCompanies = $this->companyService->getTopRatedCompanies();
-
-        return response()->json(['data' => ['top_companies' => CompanyResource::collection($topCompanies)]], 200);
+        try {
+            $topCompanies = $this->companyService->getTopRatedCompanies();
+            return response()->json(['data' => ['top_companies' => CompanyResource::collection($topCompanies)]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Не удалось получить топ-10 компаний'], 500);
+        }
     }
 }
