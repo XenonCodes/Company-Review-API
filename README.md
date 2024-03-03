@@ -197,3 +197,11 @@ GET /api/comments/{commentId}
 ```
 DELETE /api/comments/{commentId}
 ```
+
+## Тесты
+Тесты выполнены частично.
+Для запуска тестов напишите в терминал следующую команду:
+
+```
+php artisan test
+```
