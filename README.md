@@ -13,7 +13,7 @@
 1. Клонировать этот репозиторий
 
 ```
-git clone https://github.com/XenonCodes/test-task-API-2.git my-project
+git clone https://github.com/XenonCodes/company-review-API.git my-project
 ```
 
 2. Создайте файл .env
